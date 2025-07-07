@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 export default function Login(){
   const router = useRouter()
@@ -9,8 +10,20 @@ export default function Login(){
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = async () =>  {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const response = await signIn('credentials', {
+      redirect: false,
+      email,
+      password
+    })
 
+    if(response?.error){
+      alert('Incorrect email or password')
+    }
+    else{
+      router.push('/dashboard')
+    }
   }
 
   return(
