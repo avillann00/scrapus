@@ -3,12 +3,14 @@
 import { useRouter } from 'next/navigation'
 
 export default function Home(){
+  const router = useRouter()
+
   return(
     <div className='bg-gray-200 w-screen h-screen p-10'>
       <div className='fixed top-0 w-full left-0 text-black flex flex-row bg-pink-300 items-center justify-center'>
         <button className='fixed left-0 ml-5' onClick={() => router.push('/')}>Photo</button>
         <h1 className='text-xl' onClick={() => router.push('/')}>ScrapUs</h1>
-        <button className='fixed right-0 mr-5 hover:text-pink-500'>Login</button>
+        <button className='fixed right-0 mr-5 hover:text-pink-500' onClick={() => router.push('/login')}>Login</button>
       </div>
 
       <div className='flex flex-col gap-4 p-4 overflow-y-auto'>
