@@ -7,7 +7,7 @@ export default function Home(){
 
   return(
     <div className='bg-gray-200 w-screen h-screen p-10'>
-      <div className='fixed top-0 w-full left-0 text-black flex flex-row bg-pink-300 items-center justify-center'>
+      <div className='fixed top-0 w-full left-0 text-black flex flex-row bg-pink-300 items-center justify-center h-10 rounded-lg shadow-lg'>
         <button className='fixed left-0 ml-5' onClick={() => router.push('/')}>Photo</button>
         <h1 className='text-xl' onClick={() => router.push('/')}>ScrapUs</h1>
         <button className='fixed right-0 mr-5 hover:text-pink-500' onClick={() => router.push('/login')}>Login</button>
@@ -40,11 +40,6 @@ export default function Home(){
           <div>Photo</div>
           <div>Photo</div>
         </div>
-      </div>
-
-      <div className='fixed bottom-0 w-full left-0 text-black flex flex-row items-center justify-center gap-5 bg-pink-300'>
-        <button className='hover:text-blue-500' onClick={() => router.push('/terms')}>Terms of Service</button>
-        <button className='hover:text-blue-500' onClick={() => router.push('/privacy')}>Privacy Policy</button>
       </div>
     </div>
   )
