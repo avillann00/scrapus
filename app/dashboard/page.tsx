@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
+import Album from '../components/Album'
 
 type Album = {
   id: string,
@@ -20,28 +22,31 @@ type Photo = {
 
 export default function Dashboard(){
   const router = useRouter()
+  const { data: session, status } = useSession()
 
   const [recentAlbums, setRecentAlbums] = useState<Album[]>([])
   const [recentPhotos, setRecentPhotos] = useState<Photo[]>([])
 
   const [isAddOpen, setIsAddOpen] = useState(false)
 
-  /*
   useEffect(() => {
     const getRecentAlbums = async () => {
       try{
-        const response = await axios.get('/api/albums/recent')
+        const response = await axios.get(`/api/album/recent?userId=${session.user.id}`)
 
-        setRecentAlbums(response.data)
+        setRecentAlbums(response.data.albums || [])
       }
       catch(error){
         console.error('Error getting recent albums: ', error)
       }
     }
 
-    getRecentAlbums()
-  }, [])
+    if(status === 'authenticated'){
+      getRecentAlbums()
+    }
+  }, [session, status])
 
+  /*
   useEffect(() => {
     const getRecentPhotos = async () => {
       try{
@@ -58,27 +63,16 @@ export default function Dashboard(){
   }, [])
   */
 
+
   const mappedAlbums = recentAlbums?.map((album: Album) => (
-    <div key={album.id} onClick={() => router.push(`/dashboard/album?id=${album.id}`)}>
-      <h1>{album.title}</h1>
-    </div>
+    <Album key={album.id} id={album.id} title={album.title} tags={album.tags} />
   ))
 
-  const mappedPhotoTags = (photo: Photo) => {
-    return(
-      photo?.tags?.map((tag: string) => (
-        <div key={tag}>
-          {tag}
-        </div>
-      ))
-    )
-  }
-
   const mappedPhotos = recentPhotos?.map((photo: Photo) => (
-    <div key={photo.id} onClick={() => router.push(`/dashboard/photo?id=${photo.id}`)}>
+    <div key={photo.id} onClick={() => router.push(`/dashboard/photo/${photo.id}`)} className='border-2 rounded-lg p-2 h-full w-1/4'>
       <h1>{photo.title}</h1>
-      <h1>{photo.caption}</h1>
-      <h1>{mappedPhotoTags(photo)}</h1>
+      <h2>{photo.caption}</h2>
+      <div className='flex flex-row items-center justify-center gap-1'>{mappedTags(photo.tags)}</div>
     </div>
   ))
 
@@ -104,7 +98,7 @@ export default function Dashboard(){
               className='bg-black rounded-lg shadow-lg p-2 hover:text-red-500 text-white px-10'
               onClick={(e) => {
                 e.stopPropagation()
-                router.push('/dashboard/album')
+                router.push('/dashboard/album/create')
               }}
             >
               New Album
@@ -113,7 +107,7 @@ export default function Dashboard(){
               className='bg-black rounded-lg shadow-lg p-2 hover:text-red-500 text-white'
               onClick={(e) => {
                 e.stopPropagation()
-                router.push('/dashboard/photo')
+                router.push('/dashboard/photo/create')
               }}
             >
               New Photo
@@ -121,19 +115,25 @@ export default function Dashboard(){
           </div>
         </div>
 
-        <div>
-          <h1 className='text-black text-xl'>Recent Albums</h1>
+        <div className='w-full text-center flex flex-col items-center justify-center p-4'>
+          <div className='flex flex-row text-black w-1/2'>
+            <h1 className='text-xl w-1/2 text-left'>Recent Albums</h1>
+            <button onClick={() => router.push('/dashboard/album/all')} className='w-1/2 text-right hover:text-blue-500'>View all</button>
+          </div>
           {recentAlbums.length >= 1 && (
-            <div>
+            <div className='text-black flex flex-row w-full items-center justify-center overflow-x-auto gap-1'>
               {mappedAlbums}
             </div>
           )}
         </div>
 
-        <div>
-          <h1 className='text-black text-xl'>Recent Photo</h1>
+        <div className='w-full text-center flex flex-col items-center justify-center'>
+          <div className='flex flex-row text-black w-1/2'>
+            <h1 className='text-black text-xl'>Recent Photo</h1>
+            <button onClick={() => router.push('/dashboard/photo/all')} className='w-1/2 text-right hover:text-blue-500'>View all</button>
+          </div>
           {recentPhotos.length >= 1 && (
-            <div>
+            <div className='text-black flex flex-row w-full items-center justify-center overflow-x-auto gap-1'>
               {mappedPhotos}
             </div>
           )}
