@@ -118,7 +118,9 @@ export default function Dashboard(){
         <div className='w-full text-center flex flex-col items-center justify-center p-4'>
           <div className='flex flex-row text-black w-1/2'>
             <h1 className='text-xl w-1/2 text-left'>Recent Albums</h1>
-            <button onClick={() => router.push('/dashboard/album/all')} className='w-1/2 text-right hover:text-blue-500'>View all</button>
+            <div className='w-1/2 text-right'>
+              <button onClick={() => router.push('/dashboard/album/all')} className='hover:text-blue-500'>View all</button>
+            </div>
           </div>
           {recentAlbums.length >= 1 && (
             <div className='text-black flex flex-row w-full items-center justify-center overflow-x-auto gap-1'>
@@ -130,7 +132,9 @@ export default function Dashboard(){
         <div className='w-full text-center flex flex-col items-center justify-center'>
           <div className='flex flex-row text-black w-1/2'>
             <h1 className='text-black text-xl'>Recent Photo</h1>
-            <button onClick={() => router.push('/dashboard/photo/all')} className='w-1/2 text-right hover:text-blue-500'>View all</button>
+            <div className='w-1/2 text-right'>
+              <button onClick={() => router.push('/dashboard/photo/all')} className='hover:text-blue-500'>View all</button>
+            </div>
           </div>
           {recentPhotos.length >= 1 && (
             <div className='text-black flex flex-row w-full items-center justify-center overflow-x-auto gap-1'>

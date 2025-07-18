@@ -35,6 +35,21 @@ model Album {
   user User @relation(fields: [userId], references: [id])
   userId String
 
+  photos Photo[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Photo {
+  id String @id @default(uuid())
+  title String
+  tags String[]
+  photoUrl String
+
+  album Album @relation(fields: [albumId], references: [id])
+  albumId String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
