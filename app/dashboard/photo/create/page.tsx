@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import ImageUploader from '../../../components/ImageUploader'
 
 type Album = {
   id: string,
@@ -11,21 +12,17 @@ type Album = {
   tags: string[]
 }
 
-export default function CreateAlbum(){
+export default function CreatePhoto(){
   const router = useRouter()
   const { data: session, status } = useSession()
 
   const [title, setTitle] = useState('')
-  const [album, setAlbum] = useState<Album>({
-    id: '',
-    title: '',
-    tags: []
-  })
+  const [albumId, setAlbumId] = useState('') 
   const [albums, setAlbums] = useState<Album[]>([])
   const [tag, setTag] = useState('')
   const [tags, setTags] = useState<string[]>([])
-  const [photoFile, setPhotoFile] = useState('')
-  const [photoUrl, setPhotoUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
+  const [caption, setCaption] = useState('')
 
   const mappedTags = tags.map((tag: string) => (
     <div key={tag} className='flex flex-row gap-1'>
@@ -42,12 +39,12 @@ export default function CreateAlbum(){
       return
     }
 
-    if(album.id.length < 1){
+    if(albumId.length < 1){
       alert('Album is required')
       return
     }
 
-    if(!photoFile){
+    if(!imageUrl){
       alert('Photo is required')
       return
     }
@@ -57,14 +54,16 @@ export default function CreateAlbum(){
         userId: session.user.id,
         title: title,
         tags: tags,
-        photoUrl: photoUrl
+        photoUrl: imageUrl,
+        albumId: albumId,
+        caption: caption
       })
 
       router.push('/dashboard')
     }
     catch(error){
-      console.error('Error creating album: ', error)
-      alert('Error creating album')
+      console.error('Error creating photo: ', error)
+      alert('Error creating photo')
     }
   }
 
@@ -104,7 +103,7 @@ export default function CreateAlbum(){
   }, [])
 
   const mappedOptions = albums?.map((album: Album) => (
-    <option key={album.id} value={album} className='text-black'>
+    <option key={album.id} value={album.id} className='text-black'>
       {album.title}
     </option>
   ))
@@ -112,9 +111,9 @@ export default function CreateAlbum(){
   return(
     <div className='bg-gray-200 w-screen h-screen flex flex-col items-center justify-center text-black gap-2'>
       <h1 className='text-xl'>New Photo</h1>
-      <div className='bg-white w-3/5 h-3/5 rounded-lg shadow-lg flex flex-col items-center justify-center gap-2'>
+      <div className='bg-white w-3/5 h-5/7 rounded-lg shadow-lg flex flex-col items-center justify-center gap-2 p-30 overflow-y-auto'>
         <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center gap-4'>
-          <label className='flex flex-col items-center justify-center'>
+          <label className='flex flex-col items-center justify-center mt-20'>
             Title
             <input
               type='text'
@@ -125,24 +124,36 @@ export default function CreateAlbum(){
             />
           </label>
 
-          <label className='flex flex-col'>
+          <label className='flex flex-col text-center'>
             Album
             <select 
               className='w-full'
-              onChange={(e) => setAlbum(e.target.value)}
-              value={album.title}
+              onChange={(e) => setAlbumId(e.target.value)}
+              value={albumId}
             >
+              <option value=''>Select an Album</option>
               {mappedOptions}
             </select>
           </label>
 
-          <label className='flex flex-col items-center justify-center'>
+          <label className='flex flex-col items-center justify-center border border-dashed rounded-lg p-2 hover:bg-pink-100'>
             Photo
+            <ImageUploader setImageUrl={setImageUrl} />
+            {imageUrl.length > 0 && (
+              <div className='flex flex-col items-center justify-center'>
+                <img src={imageUrl} className='max-w-1/4'/>
+              </div>
+            )}
+          </label>
+
+          <label className='flex flex-col text-center'>
+            Caption
             <input
-              type='file'
-              accept='image/*'
-              onChange={(e) => setCoverFile(e.target.files?.[0] || null)}
-              className='text-center border border-pink-200 border-dashed rounded-lg p-2 flex flex-col hover:bg-pink-100'
+              type='text'
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              placeholder='Caption'
+              className='text-center'
             />
           </label>
 

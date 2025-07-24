@@ -9,6 +9,7 @@ type Album = {
   id: string,
   title: string,
   tags: string[]
+  coverUrl: string
 }
 
 export default function SingleAlbum(){
@@ -43,7 +44,7 @@ export default function SingleAlbum(){
   return(
     <div className='w-screen h-screen text-black bg-gray-200 flex flex-col items-center justify-center'>
       <div className='w-1/2 h-1/2 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center gap-2'>
-        <Album key={album.id} id={album.id} title={album.title} tags={album.tags} />
+        <Album key={album.id} id={album.id} title={album.title} tags={album.tags} coverUrl={album.coverUrl} />
         <button className='hover:text-blue-500' onClick={() => router.back()}>back</button>
       </div>
     </div>

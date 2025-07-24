@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Album from '../components/Album'
+import Photo from '../components/Photo'
 
 type Album = {
   id: string,
   title: string,
   tags: string[]
+  coverUrl: string
 }
 
 type Photo = {
@@ -17,7 +19,7 @@ type Photo = {
   title: string,
   caption: string,
   tags: string[],
-  people: string[]
+  photoUrl: string
 }
 
 export default function Dashboard(){
@@ -46,39 +48,35 @@ export default function Dashboard(){
     }
   }, [session, status])
 
-  /*
   useEffect(() => {
     const getRecentPhotos = async () => {
       try{
-        const response = await axios.get('/api/photos/recent')
+        const response = await axios.get(`/api/photo/recent?userId=${session.user.id}`)
 
-        setRecentPhotos(response.data)
+        setRecentPhotos(response.data.photos || [])
       }
       catch(error){
         console.error('Error getting recent photos: ', error)
       }
     }
 
-    getRecentPhotos()
-  }, [])
-  */
+    if(status === 'authenticated'){
+      getRecentPhotos()
+    }
+  }, [session, status])
 
 
   const mappedAlbums = recentAlbums?.map((album: Album) => (
-    <Album key={album.id} id={album.id} title={album.title} tags={album.tags} />
+    <Album key={album.id} id={album.id} title={album.title} tags={album.tags} coverUrl={album.coverUrl} />
   ))
 
   const mappedPhotos = recentPhotos?.map((photo: Photo) => (
-    <div key={photo.id} onClick={() => router.push(`/dashboard/photo/${photo.id}`)} className='border-2 rounded-lg p-2 h-full w-1/4'>
-      <h1>{photo.title}</h1>
-      <h2>{photo.caption}</h2>
-      <div className='flex flex-row items-center justify-center gap-1'>{mappedTags(photo.tags)}</div>
-    </div>
+    <Photo key={photo.id} id={photo.id} title={photo.title} tags={photo.tags} photoUrl={photo.photoUrl} caption={photo.caption} />
   ))
 
   return(
     <div className='min-w-screen min-h-screen bg-gray-200 flex items-center justify-center'>
-      <div className='w-1/2 h-3/4 bg-white flex flex-col rounded-lg shadow-lg items-center justify-center overflow-y-auto p-4 gap-4'>
+      <div className='w-3/4 h-3/4 bg-white flex flex-col rounded-lg shadow-lg items-center justify-center overflow-y-auto p-4 gap-4 p-30'>
         <div 
           onClick={() => setIsAddOpen(prev => !prev)}
           className={`bg-pink-300 hover:bg-pink-400 rounded-lg shadow-lg px-10 py-4 text-center flex flex-col gap-2 transition-all duration-300 ease-in-out cursor-pointer ${isAddOpen? 'px-30' : 'px-10'}`}
@@ -131,7 +129,7 @@ export default function Dashboard(){
 
         <div className='w-full text-center flex flex-col items-center justify-center'>
           <div className='flex flex-row text-black w-1/2'>
-            <h1 className='text-black text-xl'>Recent Photo</h1>
+            <h1 className='text-black text-xl'>Recent Photos</h1>
             <div className='w-1/2 text-right'>
               <button onClick={() => router.push('/dashboard/photo/all')} className='hover:text-blue-500'>View all</button>
             </div>

@@ -29,7 +29,7 @@ export default function Login(){
   return(
     <div className='bg-gray-200 w-screen h-screen flex flex-col items-center justify-center gap-5'>
       <h1 className='text-center text-2xl text-black'>Login</h1>
-      <div className='bg-white w-1/2 h-1/2 rounded-lg shadow-lg text-black flex flex-col items-center justify-center'>
+      <div className='bg-white w-1/2 h-1/2 rounded-lg shadow-lg text-black flex flex-col items-center justify-center overflow-y-auto'>
         <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
           <label className='flex flex-col text-center'>
             Email

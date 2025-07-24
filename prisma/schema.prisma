@@ -46,6 +46,9 @@ model Photo {
   title String
   tags String[]
   photoUrl String
+  caption String?
+
+  userId String
 
   album Album @relation(fields: [albumId], references: [id])
   albumId String

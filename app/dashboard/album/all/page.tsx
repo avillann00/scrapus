@@ -10,6 +10,7 @@ type Album = {
   id: string,
   title: string,
   tags: string[]
+  coverUrl: string
 }
 
 export default function AllAlbums(){
@@ -36,7 +37,7 @@ export default function AllAlbums(){
   }, [session, status])
 
   const mappedAlbums = albums?.map((album: Album) => (
-    <Album key={album.id} id={album.id} title={album.title} tags={album.tags} />
+    <Album key={album.id} id={album.id} title={album.title} tags={album.tags} coverUrl={album.coverUrl} />
   ))
 
   return(

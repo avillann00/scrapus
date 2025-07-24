@@ -9,7 +9,9 @@ import Photo from '../../../components/Photo'
 type Photo = {
   id: string,
   title: string,
-  tags: string[]
+  caption: string,
+  tags: string[],
+  photoUrl: string
 }
 
 export default function AllPhotos(){
@@ -36,7 +38,7 @@ export default function AllPhotos(){
   }, [session, status])
 
   const mappedPhotos = photos?.map((photo: Photo) => (
-    <Photo key={photo.id} id={photo.id} title={photo.title} tags={photo.tags} />
+    <Photo key={photo.id} id={photo.id} title={photo.title} tags={photo.tags} photoUrl={photo.photoUrl} />
   ))
 
   return(

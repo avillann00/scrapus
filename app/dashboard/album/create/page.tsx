@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import ImageUploader from '../../../components/ImageUploader'
 
 export default function CreateAlbum(){
   const router = useRouter()
@@ -12,8 +13,7 @@ export default function CreateAlbum(){
   const [title, setTitle] = useState('')
   const [tag, setTag] = useState('')
   const [tags, setTags] = useState<string[]>([])
-  const [coverFile, setCoverFile] = useState('')
-  const [coverUrl, setCoverUrl] = useState('')
+  const [imageUrl, setImageUrl] = useState('')
 
   const mappedTags = tags.map((tag: string) => (
     <div key={tag} className='flex flex-row gap-1'>
@@ -35,7 +35,7 @@ export default function CreateAlbum(){
         userId: session.user.id,
         title: title,
         tags: tags,
-        coverUrl: coverUrl
+        coverUrl: imageUrl
       })
 
       router.push('/dashboard')
@@ -67,7 +67,7 @@ export default function CreateAlbum(){
   return(
     <div className='bg-gray-200 w-screen h-screen flex flex-col items-center justify-center text-black gap-2'>
       <h1 className='text-xl'>New Album</h1>
-      <div className='bg-white w-3/5 h-3/5 rounded-lg shadow-lg flex flex-col items-center justify-center gap-2'>
+      <div className='bg-white w-3/5 h-3/5 rounded-lg shadow-lg flex flex-col items-center justify-center gap-2 overflow-y-auto'>
         <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center gap-4'>
           <label className='flex flex-col items-center justify-center'>
             Title
@@ -99,14 +99,14 @@ export default function CreateAlbum(){
             )}
           </label>
 
-          <label className='flex flex-col items-center justify-center'>
+          <label className='flex flex-col items-center justify-center border border-dashed rounded-lg p-2 hover:bg-pink-100'>
             Cover Image
-            <input
-              type='file'
-              accept='image/*'
-              onChange={(e) => setCoverFile(e.target.files?.[0] || null)}
-              className='text-center border border-pink-200 border-dashed rounded-lg p-2 flex flex-col hover:bg-pink-100'
-            />
+            <ImageUploader setImageUrl={setImageUrl} />
+            {imageUrl.length > 0 && (
+              <div className='flex flex-col items-center justify-center'>
+                <img src={imageUrl} className='max-w-1/4'/>
+              </div>
+            )}
           </label>
           <button type='submit' className='hover:text-pink-500'>Create Album</button>
         </form>

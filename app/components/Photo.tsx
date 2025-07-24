@@ -6,15 +6,17 @@ type Photo = {
   id: string
   title: string
   tags: string[]
+  photoUrl: string
+  caption: string
 }
 
-export default function Photo({ id, title, tags }: Photo){
+export default function Photo({ id, title, tags, photoUrl, caption }: Photo){
   const router = useRouter()
 
   return(
     <div
       onClick={() => router.push(`/dashboard/photo/${id}`)}
-      className='cursor-pointer border-2 rounded-lg p-4 w-1/4 hover:bg-gray-100 transition duration-150'
+      className='cursor-pointer border-2 rounded-lg p-4 w-1/4 hover:bg-gray-100 transition duration-150 flex flex-col items-center justify-center gap-2'
     >
       <h1 className='text-lg font-semibold mb-2'>{title}</h1>
       <div className='flex flex-row gap-2 justify-center'>
@@ -27,6 +29,10 @@ export default function Photo({ id, title, tags }: Photo){
           </div>
         ))}
       </div>
+      {photoUrl?.length > 0 && (
+        <img className='max-h-3/4 max-w-3/4' src={photoUrl} />
+      )}
+      <h1 className='text-md text-black'>{caption}</h1>
     </div>
   )
 }

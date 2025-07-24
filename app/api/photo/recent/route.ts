@@ -3,7 +3,8 @@ import prisma from '@/lib/prisma'
 
 export async function GET(req: Request){
   try{
-    const { userId } = await req.json()
+    const { searchParams } = new URL(req.url)
+    const userId = searchParams.get('userId')
 
     if(!userId){
       return NextResponse.json({ error: 'Missing user id' }, { status: 400 })
