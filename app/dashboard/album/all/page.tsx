@@ -22,6 +22,10 @@ export default function AllAlbums(){
   useEffect(() => {
     const getAllAlbums = async () => {
       try{
+        if(!session){
+          return
+        }
+
         const response = await axios.get(`/api/album?userId=${session.user.id}`)
 
         setAlbums(response.data.albums)

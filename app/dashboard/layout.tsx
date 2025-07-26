@@ -1,9 +1,10 @@
 'use client'
 
-import { ReactNode, useEffect } from 'react'
+import { ReactNode } from 'react'
 import { FaUser } from 'react-icons/fa'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 
 export default function Layout({ children }: { children: ReactNode }){
   const router = useRouter()
@@ -29,7 +30,7 @@ export default function Layout({ children }: { children: ReactNode }){
       <div 
         className='bg-pink-300 text-black items-center w-full flex flex-row h-10 px-4 shadow-lg rounded-lg justify-between fixed top-0 z-50'
       >
-        <img className='w-1/3' alt='Logo' />
+        <Image className='w-1/3' alt='Logo' src='' />
         <h1 className='text-black w-1/3 text-center text-2xl' onClick={() => router.push('/dashboard')}>ScrapUs</h1>
         <FaUser size={24} color='gray' className='w-1/3' onClick={() => router.push('/dashboard/profile')} />
       </div>

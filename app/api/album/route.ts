@@ -58,6 +58,7 @@ export async function GET(req: Request){
     return NextResponse.json({ success: true, albums }, { status: 200 })
   }
   catch(error){
+    console.error('Error getting all albums: ', error)
     return NextResponse.json({ error: 'Server error getting all albums' }, { status: 500 })
   }
 }

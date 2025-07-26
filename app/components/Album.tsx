@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 type Album = {
   id: string
@@ -29,7 +30,7 @@ export default function Album({ id, title, tags, coverUrl }: Album){
         ))}
       </div>
       {coverUrl?.length > 0 && (
-        <img className='max-h-3/4 max-w-3/4' src={coverUrl} />
+        <Image alt='Cover photo' className='max-h-3/4 max-w-3/4' src={coverUrl} />
       )}
     </div>
   )

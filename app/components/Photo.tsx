@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 type Photo = {
   id: string
@@ -30,7 +31,7 @@ export default function Photo({ id, title, tags, photoUrl, caption }: Photo){
         ))}
       </div>
       {photoUrl?.length > 0 && (
-        <img className='max-h-3/4 max-w-3/4' src={photoUrl} />
+        <Image alt='Photo' className='max-h-3/4 max-w-3/4' src={photoUrl} />
       )}
       <h1 className='text-md text-black'>{caption}</h1>
     </div>

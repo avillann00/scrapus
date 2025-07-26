@@ -5,10 +5,11 @@ import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import ImageUploader from '../../../components/ImageUploader'
+import Image from 'next/image'
 
 export default function CreateAlbum(){
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
 
   const [title, setTitle] = useState('')
   const [tag, setTag] = useState('')
@@ -30,6 +31,10 @@ export default function CreateAlbum(){
       return
     }
 
+    if(!session){
+      return
+    }
+
     try{
       const response = await axios.post('/api/album', {
         userId: session.user.id,
@@ -38,6 +43,7 @@ export default function CreateAlbum(){
         coverUrl: imageUrl
       })
 
+      console.log(response)
       router.push('/dashboard')
     }
     catch(error){
@@ -104,7 +110,7 @@ export default function CreateAlbum(){
             <ImageUploader setImageUrl={setImageUrl} />
             {imageUrl.length > 0 && (
               <div className='flex flex-col items-center justify-center'>
-                <img src={imageUrl} className='max-w-1/4'/>
+                <Image alt='Selected Image' src={imageUrl} className='max-w-1/4'/>
               </div>
             )}
           </label>

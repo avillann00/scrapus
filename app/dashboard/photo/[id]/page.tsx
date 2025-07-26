@@ -22,7 +22,9 @@ export default function SinglePhoto(){
   const [photo, setPhoto] = useState<Photo>({
     id: '',
     title: '',
-    tags: []
+    tags: [],
+    caption: '',
+    photoUrl: ''
   })
 
   useEffect(() => {

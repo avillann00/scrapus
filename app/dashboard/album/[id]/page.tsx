@@ -21,7 +21,8 @@ export default function SingleAlbum(){
   const [album, setAlbum] = useState<Album>({
     id: '',
     title: '',
-    tags: []
+    tags: [],
+    coverUrl: ''
   })
 
   useEffect(() => {

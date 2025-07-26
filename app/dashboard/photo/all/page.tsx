@@ -23,6 +23,10 @@ export default function AllPhotos(){
   useEffect(() => {
     const getAllPhotos = async () => {
       try{
+        if(!session){
+          return
+        }
+
         const response = await axios.get(`/api/photo?userId=${session.user.id}`)
 
         setPhotos(response.data.photos)
@@ -38,7 +42,7 @@ export default function AllPhotos(){
   }, [session, status])
 
   const mappedPhotos = photos?.map((photo: Photo) => (
-    <Photo key={photo.id} id={photo.id} title={photo.title} tags={photo.tags} photoUrl={photo.photoUrl} />
+    <Photo key={photo.id} id={photo.id} title={photo.title} tags={photo.tags} photoUrl={photo.photoUrl} caption={photo.caption} />
   ))
 
   return(

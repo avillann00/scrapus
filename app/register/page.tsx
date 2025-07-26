@@ -9,7 +9,7 @@ export default function Register(){
 
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
-  const [names, setNames] = useState<String[]>([])
+  const [names, setNames] = useState<string[]>([])
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -40,6 +40,7 @@ export default function Register(){
         password: password
       })
 
+      console.log(response)
       router.push('/login')
     }
     catch(error){

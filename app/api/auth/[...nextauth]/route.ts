@@ -12,7 +12,7 @@ const handler = NextAuth({
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials){
-        if(!credentials.email || !credentials.password){
+        if(!credentials?.email || !credentials?.password){
           console.log('Email or password are not present')
           return null
         }
@@ -44,7 +44,7 @@ const handler = NextAuth({
       if(user){ 
         token.id = user.id
         token.names = user.names
-        token.email = user.email
+        token.email = user.email || null
       }
 
       return token

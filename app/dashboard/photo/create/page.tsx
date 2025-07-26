@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import ImageUploader from '../../../components/ImageUploader'
+import Image from 'next/image'
 
 type Album = {
   id: string,
@@ -49,6 +50,10 @@ export default function CreatePhoto(){
       return
     }
 
+    if(!session){
+      return
+    }
+
     try{
       const response = await axios.post('/api/photo', {
         userId: session.user.id,
@@ -59,6 +64,7 @@ export default function CreatePhoto(){
         caption: caption
       })
 
+      console.log(response)
       router.push('/dashboard')
     }
     catch(error){
@@ -85,7 +91,11 @@ export default function CreatePhoto(){
     setTags((prev) => prev.filter(s => s !== tag))
   }
 
-  useEffect(() => {
+  useEffect(() => { 
+    if(!session){
+        return
+    }
+
     const getAlbums = async () => {
       try{
         const response = await axios.get(`/api/album?userId=${session.user.id}`)
@@ -100,7 +110,7 @@ export default function CreatePhoto(){
     if(status === 'authenticated'){
       getAlbums()
     }
-  }, [])
+  }, [session, status])
 
   const mappedOptions = albums?.map((album: Album) => (
     <option key={album.id} value={album.id} className='text-black'>
@@ -141,7 +151,7 @@ export default function CreatePhoto(){
             <ImageUploader setImageUrl={setImageUrl} />
             {imageUrl.length > 0 && (
               <div className='flex flex-col items-center justify-center'>
-                <img src={imageUrl} className='max-w-1/4'/>
+                <Image alt='Selected Image' src={imageUrl} className='max-w-1/4'/>
               </div>
             )}
           </label>

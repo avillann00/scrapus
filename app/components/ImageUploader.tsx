@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, React } from 'react'
+import React, { useState } from 'react'
 
 type ImageUploaderProps = {
   setImageUrl: React.Dispatch<React.SetStateAction<string>>
@@ -12,6 +12,11 @@ export default function ImageUploader({ setImageUrl } : ImageUploaderProps){
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if(!file){
+      return
+    }
+
+    if(!process.env.NEXT_PUBLIC_UNSIGNED_PRESET || ! process.env.NEXT_PUBLIC_CLOUD_NAME){
+      console.error('Missing unsigned presetna and cloud name .env variables')
       return
     }
 

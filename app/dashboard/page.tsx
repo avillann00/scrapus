@@ -34,6 +34,10 @@ export default function Dashboard(){
   useEffect(() => {
     const getRecentAlbums = async () => {
       try{
+        if(!session){
+          return
+        }
+
         const response = await axios.get(`/api/album/recent?userId=${session.user.id}`)
 
         setRecentAlbums(response.data.albums || [])
@@ -51,6 +55,10 @@ export default function Dashboard(){
   useEffect(() => {
     const getRecentPhotos = async () => {
       try{
+        if(!session){
+          return
+        }
+
         const response = await axios.get(`/api/photo/recent?userId=${session.user.id}`)
 
         setRecentPhotos(response.data.photos || [])
