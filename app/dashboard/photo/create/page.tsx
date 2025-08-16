@@ -151,7 +151,7 @@ export default function CreatePhoto(){
             <ImageUploader setImageUrl={setImageUrl} />
             {imageUrl.length > 0 && (
               <div className='flex flex-col items-center justify-center'>
-                <Image alt='Selected Image' src={imageUrl} className='max-w-1/4'/>
+                <Image width={300} height={300} alt='Selected Image' src={imageUrl} className='max-w-1/4'/>
               </div>
             )}
           </label>

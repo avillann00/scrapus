@@ -46,7 +46,7 @@ export default function SinglePhoto(){
 
   return(
     <div className='w-screen h-screen text-black bg-gray-200 flex flex-col items-center justify-center'>
-      <div className='w-1/2 h-1/2 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center gap-2'>
+      <div className='w-1/2 h-1/2 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center gap-2 overflow-y-auto'>
         <Photo key={photo.id} id={photo.id} title={photo.title} tags={photo.tags} photoUrl={photo.photoUrl} caption={photo.caption} />
         <button className='hover:text-blue-500' onClick={() => router.back()}>back</button>
       </div>
