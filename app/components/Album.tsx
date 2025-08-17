@@ -16,9 +16,9 @@ export default function Album({ id, title, tags, coverUrl }: Album){
   return(
     <div
       onClick={() => router.push(`/dashboard/album/${id}`)}
-      className='cursor-pointer border-2 rounded-lg p-4 w-1/4 hover:bg-gray-400 transition duration-150 flex flex-col items-center justify-center gap-2 bg-gray-200'
+      className='min-w-[200px] min-h-[200px] flex-shrink-0 hover:bg-gray-200 p-2 rounded-lg flex flex-col gap-1'
     >
-      <h1 className='text-lg font-semibold mb-2'>{title}</h1>
+      <h1 className='text-lg font-semibold mb-1'>{title}</h1>
       <div className='flex flex-row gap-2 justify-center'>
         {tags.map(tag => (
           <div
@@ -30,7 +30,13 @@ export default function Album({ id, title, tags, coverUrl }: Album){
         ))}
       </div>
       {coverUrl?.length > 0 && (
-        <Image alt='Cover photo' width={300} height={300} className='max-h-3/4 max-w-3/4' src={coverUrl} />
+        <Image 
+          alt='Cover photo' 
+          width={200} 
+          height={200} 
+          className='rounded-lg w-full h-48 object-cover'
+          src={coverUrl} 
+        />
       )}
     </div>
   )

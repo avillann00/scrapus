@@ -52,7 +52,7 @@ export default function AllPhotos(){
         {photos.length < 1 ? 
           (<h1 className='text-xl'>No photos available</h1>) 
             :    
-          (<div className='flex flex-col gap-2 overflow-y-auto w-full items-center'>{mappedPhotos}</div>)
+          (<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 overflow-y-auto gap-1 p-2'>{mappedPhotos}</div>)
         }
         <button onClick={() => router.back()} className='hover:text-blue-500'>Back</button>
       </div>

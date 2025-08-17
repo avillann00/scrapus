@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import Album from '../components/Album'
 import Photo from '../components/Photo'
+import Carousel from '../components/Carousel'
 
 type Album = {
   id: string,
@@ -130,7 +131,7 @@ export default function Dashboard(){
           </div>
           {recentAlbums.length >= 1 && (
             <div className='text-black flex flex-row w-full items-center justify-center overflow-x-auto gap-1'>
-              {mappedAlbums}
+              <Carousel items={recentAlbums} />
             </div>
           )}
         </div>
@@ -144,7 +145,7 @@ export default function Dashboard(){
           </div>
           {recentPhotos.length >= 1 && (
             <div className='text-black flex flex-row w-full items-center justify-center overflow-x-auto gap-1'>
-              {mappedPhotos}
+              <Carousel items={recentPhotos} />
             </div>
           )}
         </div>

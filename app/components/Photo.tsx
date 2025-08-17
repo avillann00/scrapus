@@ -17,23 +17,20 @@ export default function Photo({ id, title, tags, photoUrl, caption }: Photo){
   return(
     <div
       onClick={() => router.push(`/dashboard/photo/${id}`)}
-      className='cursor-pointer border-2 rounded-lg p-4 w-1/4 hover:bg-gray-400 transition duration-150 flex flex-col items-center justify-center gap-2 bg-gray-200'
+      className='min-w-[200px] flex-shrink-0 hover:bg-gray-200 p-2 rounded-lg'
     >
-      <h1 className='text-lg font-semibold mb-2'>{title}</h1>
       <div className='flex flex-row gap-2 justify-center'>
-        {tags.map(tag => (
-          <div
-            key={tag}
-            className='bg-green-300 text-sm rounded-lg px-3 py-1'
-          >
-            {tag}
-          </div>
-        ))}
       </div>
       {photoUrl?.length > 0 && (
-        <Image alt='Photo' width={300} height={300} className='max-h-3/4 max-w-3/4' src={photoUrl} />
+        <Image 
+          alt='Photo' 
+          width={300} 
+          height={300} 
+          className='rounded-lg w-full h-48 object-cover'
+          src={photoUrl} 
+        />
       )}
-      <h1 className='text-md text-black'>{caption}</h1>
+      <h1 className='text-lg font-semibold mb-2 text-center'>{title}</h1>
     </div>
   )
 }

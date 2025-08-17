@@ -40,18 +40,41 @@ export async function POST(req: Request){
 export async function GET(req: Request){
   try{
     const { searchParams } = new URL(req.url)
-    const userId = searchParams.get('userId')
 
-    if(!userId){
-      return NextResponse.json({ error: 'Missing user id' }, { status: 400 })
+    const albumId = searchParams.get('albumId')
+
+    const orderParam = searchParams.get('order')
+    const order: 'asc' | 'desc' = orderParam === 'asc' ? 'asc' : 'desc'
+
+    if(albumId){
+      const page = parseInt(searchParams.get('page'))
+      const limit = parseInt(searchParams.get('limit'))
+
+      const offset = (page - 1) * limit
+
+      const photos = await prisma.photo.findMany({
+        where: { albumId },
+        skip: offset,
+        take: limit,
+        orderBy: { createdAt: order }
+      })
+
+      return NextResponse.json({ success: true, photos }, { status: 200 })
     }
+    else{
+      const userId = searchParams.get('userId')
 
-    const photos = await prisma.photo.findMany({
-      where: { userId },
-      orderBy: { createdAt: 'desc' }
-    })
+      if(!userId){
+        return NextResponse.json({ error: 'Missing user id' }, { status: 400 })
+      }
 
-    return NextResponse.json({ success: true, photos }, { status: 200 })
+      const photos = await prisma.photo.findMany({
+        where: { userId },
+        orderBy: { createdAt: order }
+      })
+
+      return NextResponse.json({ success: true, photos }, { status: 200 })
+    }
   }
   catch(error){
     console.error('Error getting all photos:', error)

@@ -47,11 +47,13 @@ export default function AllAlbums(){
   return(
     <div className='w-screen h-screen bg-gray-200 flex flex-col items-center justify-center text-black gap-2'>
       <h1 className='text-2xl'>All Albums</h1>
-      <div className='bg-white w-3/5 h-2/3 rounded-lg shadow-lg flex flex-col items-center justify-center'>
+      <div
+        className='bg-white w-3/5 h-2/3 rounded-lg shadow-lg flex flex-col items-center justify-center'
+      >
         {albums.length < 1 ? 
           (<h1 className='text-xl'>No albums available</h1>) 
             :    
-          (<div className='flex flex-col gap-2 overflow-y-auto w-full items-center'>{mappedAlbums}</div>)
+          (<div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 overflow-y-auto gap-1 p-2'>{mappedAlbums}</div>)
         }
         <button onClick={() => router.back()} className='hover:text-blue-500'>Back</button>
       </div>
