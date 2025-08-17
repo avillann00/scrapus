@@ -74,15 +74,6 @@ export default function Dashboard(){
     }
   }, [session, status])
 
-
-  const mappedAlbums = recentAlbums?.map((album: Album) => (
-    <Album key={album.id} id={album.id} title={album.title} tags={album.tags} coverUrl={album.coverUrl} />
-  ))
-
-  const mappedPhotos = recentPhotos?.map((photo: Photo) => (
-    <Photo key={photo.id} id={photo.id} title={photo.title} tags={photo.tags} photoUrl={photo.photoUrl} caption={photo.caption} />
-  ))
-
   return(
     <div className='min-w-screen min-h-screen bg-gray-200 flex items-center justify-center'>
       <div className='w-3/4 h-3/4 bg-white flex flex-col rounded-lg shadow-lg items-center justify-center overflow-y-auto p-4 gap-4 p-30'>

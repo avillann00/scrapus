@@ -9,6 +9,8 @@ type Photo = {
   id: string
   title: string
   photoUrl: string
+  tags: string[]
+  caption: string
 }
 
 type Album = {
@@ -18,7 +20,9 @@ type Album = {
   coverUrl: string
 }
 
-type CarouselItem = {
+type CarouselItem = Photo | Album
+
+type CarouselProps = {
   items: CarouselItem[]
 }
 

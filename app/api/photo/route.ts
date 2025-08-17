@@ -47,8 +47,8 @@ export async function GET(req: Request){
     const order: 'asc' | 'desc' = orderParam === 'asc' ? 'asc' : 'desc'
 
     if(albumId){
-      const page = parseInt(searchParams.get('page'))
-      const limit = parseInt(searchParams.get('limit'))
+      const page = parseInt(searchParams.get('page') ?? '1')
+      const limit = parseInt(searchParams.get('limit') ?? '10')
 
       const offset = (page - 1) * limit
 

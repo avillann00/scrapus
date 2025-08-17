@@ -6,7 +6,6 @@ import axios from 'axios'
 import Album from '../../../components/Album'
 import Image from 'next/image'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
-import Carousel from '../../../components/Carousel'
 import Photo from '../../../components/Photo'
 
 type Album = {

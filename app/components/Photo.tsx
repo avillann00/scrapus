@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useEffect } from 'react'
 
 type Photo = {
   id: string
@@ -13,6 +14,11 @@ type Photo = {
 
 export default function Photo({ id, title, tags, photoUrl, caption }: Photo){
   const router = useRouter()
+
+  useEffect(() => {
+    console.log('Caption: ', caption)
+    console.log('Tags: ', tags)
+  }, [caption, tags])
 
   return(
     <div
