@@ -142,9 +142,9 @@ export default function SingleAlbum(){
         </div>
 
         <div className='flex flex-row text-xl gap-2'>
-          <button onClick={() => decreasePage()}><FaArrowLeft /></button>
+          <button className='hover:text-blue-500' onClick={() => decreasePage()}><FaArrowLeft /></button>
           <div>{page}</div>
-          <button onClick={() => increasePage()}><FaArrowRight /></button>
+          <button className='hover:text-blue-500' onClick={() => increasePage()}><FaArrowRight /></button>
         </div>
    
         <button className='hover:text-blue-500 mb-15' onClick={() => router.back()}>back</button>
