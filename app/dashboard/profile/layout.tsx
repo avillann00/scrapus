@@ -1,10 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { ReactNode } from 'react'
 
 export default function Layout({ children }: { children: ReactNode }){
-  const { data: session, status } = useSession()
 
   const router = useRouter()
 

@@ -3,7 +3,7 @@
 import { useSession, signOut } from 'next-auth/react'
 
 export default function Profile(){
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
 
   return(
     <div className='bg-white h-screen w-screen flex flex-col items-center justify-center text-black gap-4'>
