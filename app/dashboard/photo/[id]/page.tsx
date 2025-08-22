@@ -46,19 +46,21 @@ export default function SinglePhoto(){
 
   return(
     <div className='w-screen h-screen text-black bg-gray-200 flex flex-col items-center justify-center'>
-      <div className='w-1/2 h-1/2 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center gap-2 overflow-y-auto p-4'>
+      <div className='w-1/2 h-1/2 bg-white shadow-lg rounded-lg flex flex-col items-center gap-2 overflow-y-auto px-4 py-10'>
         <h1 className='text-xl font-bold'>{photo.title}</h1>
-        {photo?.tags?.map(tag => (
-          <div
-            key={tag}
-            className='bg-green-300 text-sm rounded-lg px-3 py-1'
-          >
-            {tag}
-          </div>
-        ))}
+        <div className='flex flex-wrap gap-2'>
+          {photo?.tags?.map(tag => (
+            <div
+              key={tag}
+              className='bg-green-300 text-sm rounded-lg px-3 py-1'
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
         {photo?.photoUrl && <Image src={photo?.photoUrl ?? null} width={300} height={300} className='rounded-lg' alt='Photo' />}
         {photo?.caption?.length > 0 && <div className='border-2 border-black rounded-lg px-4 py-2'>{photo?.caption}</div>}
-        <button className='hover:text-blue-500' onClick={() => router.back()}>back</button>
+        <button className='hover:text-blue-500 mt-auto' onClick={() => router.back()}>back</button>
       </div>
     </div>
   )
