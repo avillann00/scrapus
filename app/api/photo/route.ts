@@ -1,9 +1,33 @@
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
+type Song = {
+  id: string
+  name: string
+  preview_url: string | null
+  uri: string
+  album: {
+    id: string
+    name: string
+    images: { url: string }[]
+  }
+  artists: {
+    id: string
+    name: string
+  }[]
+}
+
 export async function POST(req: Request){
-  try{
-    const { userId, title, albumId, photoUrl, tags, caption } = await req.json()
+  try {
+    const { userId, title, albumId, photoUrl, tags, caption, song }: {
+      userId: string
+      title: string
+      albumId: string
+      photoUrl: string
+      tags?: string[]
+      caption?: string
+      song?: Song
+    } = await req.json()
 
     if(!userId){
       return NextResponse.json({ error: 'Missing userId' }, { status: 400 })
@@ -18,6 +42,40 @@ export async function POST(req: Request){
       return NextResponse.json({ error: 'Missing album id' }, { status: 400 })
     }
 
+    let songRecordId: string | undefined = undefined
+
+    if(song){
+      const songAlbum = await prisma.songAlbum.upsert({
+        where: { id: song.album.id },
+        update: {},
+        create: {
+          id: song.album.id,
+          name: song.album.name,
+          images: song.album.images.map(img => img.url),
+        },
+      })
+
+      const songRecord = await prisma.song.upsert({
+        where: { id: song.id },
+        update: {},
+        create: {
+          id: song.id,
+          name: song.name,
+          uri: song.uri,
+          previewUrl: song.preview_url,
+          albumId: songAlbum.id,
+          artists: {
+            create: song.artists.map(a => ({
+              artist: { connectOrCreate: { where: { id: a.id }, create: { id: a.id, name: a.name } } }
+            }))
+          }
+        },
+        include: { artists: { include: { artist: true } }, album: true }
+      })
+
+      songRecordId = songRecord.id
+    }
+
     const photo = await prisma.photo.create({
       data: {
         userId,
@@ -25,14 +83,20 @@ export async function POST(req: Request){
         tags,
         albumId,
         photoUrl,
-        caption
+        caption,
+        songId: songRecordId
+      },
+      include: {
+        song: {
+          include: { album: true, artists: { include: { artist: true } } }
+        }
       }
     })
 
-    return NextResponse.json({ success: true, photo: photo }, { status: 201 })
+    return NextResponse.json({ success: true, photo }, { status: 201 })
   }
   catch(error){
-    console.error('Error creating photo:', error)
+    console.error('Error creating photo: ', error)
     return NextResponse.json({ error: 'Server error creating new photo' }, { status: 500 })
   }
 }

@@ -13,6 +13,22 @@ type Album = {
   tags: string[]
 }
 
+type Song = {
+  id: string
+  name: string
+  preview_url: string | null
+  uri: string
+  album: {
+    id: string
+    name: string
+    images: { url: string }[]
+  }
+  artists: {
+    id: string
+    name: string
+  }[]
+}
+
 export default function CreatePhoto(){
   const router = useRouter()
   const { data: session, status } = useSession()
@@ -24,6 +40,11 @@ export default function CreatePhoto(){
   const [tags, setTags] = useState<string[]>([])
   const [imageUrl, setImageUrl] = useState('')
   const [caption, setCaption] = useState('')
+
+  const [songSearch, setSongSearch] = useState('')
+  const [songs, setSongs] = useState<Song[]>([])
+  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null)
 
   const mappedTags = tags.map((tag: string) => (
     <div key={tag} className='flex flex-row gap-1'>
@@ -61,7 +82,8 @@ export default function CreatePhoto(){
         tags: tags,
         photoUrl: imageUrl,
         albumId: albumId,
-        caption: caption
+        caption: caption,
+        song: selectedSong ?? undefined
       })
 
       console.log(response)
@@ -118,12 +140,43 @@ export default function CreatePhoto(){
     </option>
   ))
 
+  useEffect(() => {
+    const getSongs = async () => {
+      const response = await axios.get(`/api/spotify/search?song=${songSearch}`)
+
+      setSongs(response.data)
+    }
+
+    if(songSearch.trim().length > 0){
+      getSongs()
+    }
+  }, [songSearch])
+
+  const mappedSongs = songs?.map((song: Song) => (
+    <div 
+      key={song.id} 
+      className='bg-gray-100 hover:bg-gray-200 rounded-lg p-2'
+      onClick={() => {
+        setSelectedSong(song)
+
+        setSongSearch('')
+        setIsSearchOpen(false)
+      }}
+    >
+      <h1>Song: {song?.name}</h1>
+      <h1 className='flex flex-row gap-1 items-center justify-center'>
+        Artist: {song?.artists?.map((artist: {name: string;}) => (<p key={artist?.name}>{artist?.name}</p>))}
+      </h1>
+      <h1>Album: {song?.album?.name}</h1>
+    </div>
+  ))
+
   return(
-    <div className='bg-gray-200 w-screen h-screen flex flex-col items-center justify-center text-black gap-2'>
+    <div className='bg-gray-200 w-screen min-h-screen flex flex-col items-center justify-center text-black gap-2 px-6 py-12'>
       <h1 className='text-xl'>New Photo</h1>
-      <div className='bg-white w-3/5 h-5/7 rounded-lg shadow-lg flex flex-col items-center justify-center gap-2 p-30 overflow-y-auto'>
+      <div className='bg-white w-3/5 h-5/7 rounded-lg shadow-lg flex flex-col items-center justify-center gap-2 overflow-y-auto relative'>
         <form onSubmit={handleSubmit} className='flex flex-col items-center justify-center gap-4'>
-          <label className='flex flex-col items-center justify-center mt-20'>
+          <label className='flex flex-col items-center justify-center'>
             Title
             <input
               type='text'
@@ -185,6 +238,63 @@ export default function CreatePhoto(){
               </div>
             )}
           </label>
+
+          <button
+            type='button'
+            onClick={() => {
+              if(!isSearchOpen){
+                setIsSearchOpen(prev => !prev)
+                setSongSearch('')
+              }
+            }}
+            className={`
+                flex flex-col items-center justify-start 
+                bg-green-500 rounded-lg shadow-lg overflow-hidden 
+                transition-all duration-500 ease-in-out
+                ${isSearchOpen ? 'h-[260px] p-4' : 'h-[50px] px-6 hover:bg-green-400 w-1/2'}
+            `}
+          >
+            <h1>{selectedSong?.name.length > 0 && selectedSong?.name}</h1>
+            <div 
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsSearchOpen(prev => !prev)
+                setSongSearch('')
+              }}
+              className={`rounded-lg py-1  text-center flex flex-col gap-2 transition-all duration-300 ease-in-out cursor-pointer ${isSearchOpen? 'hover:bg-green-400 px-20' : 'px-6'}`}
+            >
+              <h1>{isSearchOpen ? 'Close' : 'Add Song'}</h1>
+            </div>
+
+            <div
+              className={`
+            transition-all duration-500 ease-in-out overflow-hidden flex flex-col gap-2 items-center justify-center rounded-lg 
+            ${isSearchOpen ? 'h-[200px] opacity-100 scale-100 mt-4 bg-green-500' : 'max-h-0 opacity-0 scale-95'}
+          `}
+            >
+              <input
+                type='text'
+                value={songSearch}
+                onChange={(e) => setSongSearch(e.target.value)}
+                placeholder='eg. For Whom The Bell Tolls'
+                className='text-center border-2 border-black rounded-lg p-1 hover:bg-green-400 focus:ring-black focus:border-black'
+              />
+              Songs:
+              <div className='flex flex-col overflow-y-auto gap-1'>{mappedSongs}</div>
+            </div>
+
+            {selectedSong?.name?.length > 0 && (
+              <div 
+                className='hover:text-red-500'
+                onClick={() => {
+                  setSelectedSong(null)
+                  setIsSearchOpen(prev => !prev)
+                }}
+              >
+                Clear
+              </div>
+            )}
+          </button>
 
           <button type='submit' className='hover:text-pink-500'>Add Photo</button>
         </form>

@@ -42,17 +42,66 @@ model Album {
 }
 
 model Photo {
-  id String @id @default(uuid())
-  title String
-  tags String[]
+  id       String @id @default(uuid())
+  title    String
+  tags     String[]
   photoUrl String
-  caption String?
+  caption  String?
 
   userId String
-
-  album Album @relation(fields: [albumId], references: [id])
+  album  Album @relation(fields: [albumId], references: [id])
   albumId String
+
+  song    Song? @relation(fields: [songId], references: [id])
+  songId  String? @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Song {
+  id        String   @id @default(uuid())
+  name      String
+  previewUrl String?
+  uri       String
+
+  albumId   String
+  album     SongAlbum @relation(fields: [albumId], references: [id])
+
+  artists   SongArtist[]
+  photo     Photo?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model SongAlbum {
+  id        String   @id @default(uuid())
+  name      String
+  images    String[]  // store array of URLs
+
+  songs     Song[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Artist {
+  id        String   @id @default(uuid())
+  name      String
+  songs     SongArtist[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SongArtist {
+  songId   String
+  artistId String
+
+  song     Song   @relation(fields: [songId], references: [id])
+  artist   Artist @relation(fields: [artistId], references: [id])
+
+  @@id([songId, artistId]) 
 }
