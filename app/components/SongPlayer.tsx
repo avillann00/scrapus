@@ -69,7 +69,7 @@ export default function SongPlayer({ songId }: { songId: string }){
   }, [song, songId])
 
   useEffect(() => {
-    if(!song || !song.name || !artists){
+    if(!song || !song.name || !artists || artists.length === 0){
       return
     }
     
