@@ -4,13 +4,15 @@ import { useRouter, useParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Image from 'next/image'
+import SongPlayer from '../../../components/SongPlayer'
 
 type Photo = {
   id: string,
   title: string,
   caption: string,
   tags: string[],
-  photoUrl: string
+  photoUrl: string,
+  songId: string
 }
 
 export default function SinglePhoto(){
@@ -24,13 +26,15 @@ export default function SinglePhoto(){
     title: '',
     tags: [],
     caption: '',
-    photoUrl: ''
+    photoUrl: '',
+    songId: ''
   })
 
   useEffect(() => {
     const getPhoto = async () => {
       try{
         const response = await axios.get(`/api/photo/${photoId}`)
+        console.log('song id: ', response.data.photo.songId)
 
         setPhoto(response.data.photo)
       }
@@ -60,6 +64,7 @@ export default function SinglePhoto(){
         </div>
         {photo?.photoUrl && <Image src={photo?.photoUrl ?? null} width={300} height={300} className='rounded-lg' alt='Photo' />}
         {photo?.caption?.length > 0 && <div className='border-2 border-black rounded-lg px-4 py-2'>{photo?.caption}</div>}
+        {photo?.songId && <SongPlayer songId={photo.songId} />}
         <button className='hover:text-blue-500 mt-auto' onClick={() => router.back()}>back</button>
       </div>
     </div>

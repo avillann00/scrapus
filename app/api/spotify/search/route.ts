@@ -45,12 +45,11 @@ export async function GET(req: NextRequest){
       headers: { Authorization: `Bearer ${token}` },
       params: { q: song, type: 'track', limit: 10 },
     })
-    console.log(response.data.tracks.items)
 
     return NextResponse.json(response.data.tracks.items, { status: 200 })
   } 
-  catch(error: any){
-    return NextResponse.json({ error: error.message }, { status: 500 })
+  catch(error){
+    return NextResponse.json({ error: error }, { status: 500 })
   }
 }
 

@@ -254,7 +254,7 @@ export default function CreatePhoto(){
                 ${isSearchOpen ? 'h-[260px] p-4' : 'h-[50px] px-6 hover:bg-green-400 w-1/2'}
             `}
           >
-            <h1>{selectedSong?.name.length > 0 && selectedSong?.name}</h1>
+            <h1>{selectedSong?.name || 'No Song Selected'}</h1>
             <div 
               onClick={(e) => {
                 e.stopPropagation()
@@ -283,7 +283,7 @@ export default function CreatePhoto(){
               <div className='flex flex-col overflow-y-auto gap-1'>{mappedSongs}</div>
             </div>
 
-            {selectedSong?.name?.length > 0 && (
+            {selectedSong?.name && (
               <div 
                 className='hover:text-red-500'
                 onClick={() => {
